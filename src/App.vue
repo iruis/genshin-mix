@@ -75,7 +75,7 @@
         </b-button-group>
       </div>
 
-      <b-modal id="notice" size="sm" title="알림" dialog-class="modal-notice" ok-only>
+      <b-modal id="notice" size="md" title="알림" dialog-class="modal-notice" ok-only>
         <div class="my-1">
           <p>
             영상재생은 사용자 상호작용에 의해서만 재생됩니다.<br>
@@ -88,7 +88,7 @@
         </div>
       </b-modal>
 
-      <b-modal id="album-create" size="sm" title="앨범 추가" @show="resetAlbumCreateModal" @hidden="resetAlbumCreateModal" @ok="onAlbumCreateOk" dialog-class="modal-import">
+      <b-modal id="album-create" title="앨범 추가" @show="resetAlbumCreateModal" @hidden="resetAlbumCreateModal" @ok="onAlbumCreateOk" dialog-class="modal-import">
         <form ref="album-create-form" @submit.stop.prevent="onAlbumCreateSubmit">
           <b-form-group label="앨범명" label-for="name-input" invalid-feedback="앨범명을 입력하세요." :state="newAlbum.nameState">
             <b-form-input id="name-input" v-model="newAlbum.name" :state="newAlbum.nameState" required />
@@ -96,13 +96,13 @@
         </form>
       </b-modal>
 
-      <b-modal id="album-remove" size="sm" title="앨범 제거" @ok="onCustomAlbumRemoveOk" dialog-class="modal-remove">
+      <b-modal id="album-remove" title="앨범 제거" @ok="onCustomAlbumRemoveOk" dialog-class="modal-remove">
         <div class="my-1">
           재생중인 플레이 리스트({{getAlbumName()}})를 제거합니다.<br>
         </div>
       </b-modal>
 
-      <b-modal id="album-import" size="sm" title="플레이 리스트 불러오기" @show="resetAlbumImportData" @hidden="resetAlbumImportData" @ok="onAlbumImportOk" dialog-class="modal-notice">
+      <b-modal id="album-import" title="플레이 리스트 불러오기" @show="resetAlbumImportData" @hidden="resetAlbumImportData" @ok="onAlbumImportOk" dialog-class="modal-notice">
         <form ref="album-import-form" @submit.stop.prevent="onAlbumImportSubmit">
           <b-form-group label="저장된 앨범 선택" label-for="file-input" invalid-feedback="파일을 선택해주세요." :state="Boolean(importData.file)">
             <b-form-file id="file" v-model="importData.file" @change="customAlbumImport($event)" />
@@ -112,7 +112,7 @@
         </form>
       </b-modal>
 
-      <b-modal id="album-track-append" size="sm" title="선택곡 담기" dialog-class="modal-append" @ok="onAppendToCustomAlbumOk" scrollable>
+      <b-modal id="album-track-append" size="lg" title="선택곡 담기" @ok="onAppendToCustomAlbumOk" dialog-class="modal-append" scrollable>
         <form ref="album-track-append-form" @submit.stop.prevent="onAppendToCustomAlbumSubmit">
           <b-row>
             <b-col cols="7">
@@ -121,7 +121,7 @@
                 <b-list-group-item class="py-1 px-2" v-for="track in append.tracks" :key="track.id">
                   <b-row>
                     <b-col>{{ track.title }}</b-col>
-                    <b-col md="auto">{{ duration(track) }}</b-col>
+                    <b-col sm="auto">{{ duration(track) }}</b-col>
                   </b-row>
                 </b-list-group-item>
               </b-list-group>
@@ -135,13 +135,13 @@
         </form>
       </b-modal>
 
-      <b-modal id="album-track-empty" size="sm" title="선택곡 담기" dialog-class="modal-append" ok-only>
+      <b-modal id="album-track-empty" size="lg" title="선택곡 담기" dialog-class="modal-append" ok-only>
         <div class="my-1">
           선택된 곡이 없습니다. 앨범에서 곡을 선택하세요.
         </div>
       </b-modal>
 
-      <b-modal id="album-modify" size="sm" title="앨범 편집" @hidden="resetCustomAlbumModify" @ok="onCustomAlbumModifyOk" dialog-class="modal-modify" scrollable>
+      <b-modal id="album-modify" title="앨범 편집" @hidden="resetCustomAlbumModify" @ok="onCustomAlbumModifyOk" dialog-class="modal-modify" scrollable>
         <form @submit.stop.prevent="onCustomAlbumModifySubmit">
           <div role="group">
             <label for="input-name">앨범명</label>
@@ -154,7 +154,7 @@
                 <b-list-group-item class="py-1 px-2" style="cursor: grab;" v-for="track in edit.playlist" :key="track.id">
                   <b-row>
                     <b-col>{{ track.title }}</b-col>
-                    <b-col md="auto">{{ duration(track) }}</b-col>
+                    <b-col sm="auto">{{ duration(track) }}</b-col>
                   </b-row>
                 </b-list-group-item>
               </transition-group>
@@ -847,17 +847,15 @@ main {
   background-color: #222 !important;
 }
 
-.modal-import > .modal-content,
-.modal-modify > .modal-content,
-.modal-remove > .modal-content,
-.modal-notice > .modal-content {
+.modal-import,
+.modal-modify,
+.modal-remove,
+.modal-notice {
   color: rgb(52, 58, 64) !important;
-  min-width: 460px;
 }
 
-.modal-append > .modal-content {
+.modal-append {
   color: rgb(52, 58, 64) !important;
-  min-width: 650px;
 }
 
 .toast-container {
