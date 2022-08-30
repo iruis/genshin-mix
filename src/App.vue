@@ -27,7 +27,8 @@
           <b-navbar-nav class="ml-auto">
             <b-nav-text><span class="d-inline-block mr-1 py-1">사용자 앨범</span></b-nav-text>
             <b-nav-text><b-button size="sm" class="mx-1" variant="outline-secondary" @click="customAlbumExport"><b-icon icon="download" /> 저장</b-button></b-nav-text>
-            <b-nav-text><b-button size="sm" class="ml-1" variant="outline-secondary" v-b-modal.album-import><b-icon icon="upload" /> 복원</b-button></b-nav-text>
+            <b-nav-text><b-button size="sm" class="mx-1" variant="outline-secondary" v-b-modal.album-import><b-icon icon="upload" /> 복원</b-button></b-nav-text>
+            <b-nav-text><b-button size="sm" class="ml-1" variant="outline-secondary" v-b-modal.notice><b-icon icon="info-lg" /></b-button></b-nav-text>
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
