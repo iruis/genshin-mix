@@ -75,15 +75,21 @@
         </b-button-group>
       </div>
 
-      <b-modal id="notice" size="md" title="알림" dialog-class="modal-notice" ok-only>
+      <b-modal id="notice" size="md" title="알림" dialog-class="modal-notice" scrollable ok-only>
         <div class="my-1">
           <p>
-            영상재생은 사용자 상호작용에 의해서만 재생됩니다.<br>
-            - <a href="https://developers.google.com/youtube/iframe_api_reference?hl=ko#Autoplay_and_scripted_playback" target="_blank">참고</a>
+            영상재생은 사용자 상호작용에 의해서만 재생됩니다. - <a href="https://developers.google.com/youtube/iframe_api_reference?hl=ko#Autoplay_and_scripted_playback" target="_blank">참고</a><br>
+            동영상의 시작위치가 0초일경우 제어가 불가능하여 시작위치가 잘리는 곡이있습니다.<br>
           </p>
           <p>
             버그발견 시 <a href="https://tgd.kr/s/saja_mori/65904978" target="_blank">첫 배포 글</a>에 댓글로 알려주시면 감사합니다!<br>
             <span style="color: rgba(0, 0, 0, .5);">단지 트게더 접속을 자주 하지 않는다는건 안비밀.</span>
+          </p>
+          <hr>
+          <p class="text-center">변경내용</p>
+          <p>
+            <strong>2022-08-29</strong><br>초기 샘플리스트 오타수정<br>다이얼로그 사이즈 계산문제 수정<br>
+            <strong>2022-08-31</strong><br>사용자 앨범의 곡 삭제기능 구현<br>
           </p>
         </div>
       </b-modal>
@@ -147,20 +153,34 @@
             <label for="input-name">앨범명</label>
             <b-form-input id="input-name" v-model="edit.name" placeholder="앨범명을 입력하세요" trim />
           </div>
-          <div class="mt-3">항목을 드래그하여 순서를 변경합니다.</div>
+          <div class="mt-3">항목을 드래그하여 순서를 변경하거나 체크하여 제거합니다.</div>
           <b-list-group>
-            <draggable v-model="edit.playlist">
-              <transition-group>
-                <b-list-group-item class="py-1 px-2" style="cursor: grab;" v-for="track in edit.playlist" :key="track.id">
-                  <b-row>
-                    <b-col>{{ track.title }}</b-col>
-                    <b-col sm="auto">{{ duration(track) }}</b-col>
-                  </b-row>
-                </b-list-group-item>
-              </transition-group>
-            </draggable>
+            <b-form-checkbox-group v-model="edit.selected">
+              <draggable v-model="edit.playlist">
+                <transition-group>
+                  <b-list-group-item class="py-1 px-2" style="cursor: grab;" v-for="track in edit.playlist" :key="track.id">
+                    <b-row>
+                      <b-col><b-form-checkbox :value="track.id">{{ track.title }}</b-form-checkbox></b-col>
+                      <b-col sm="auto">{{ duration(track) }}</b-col>
+                    </b-row>
+                  </b-list-group-item>
+                </transition-group>
+              </draggable>
+            </b-form-checkbox-group>
           </b-list-group>
         </form>
+
+        <template #modal-footer="{ ok, cancel }">
+          <div class="modal-modify-footer m-0">
+            <div>
+              <b-button class="m-1" variant="danger" @click="removeTrack" :disabled="edit.selected.length === 0">Remove</b-button>
+            </div>
+            <div>
+              <b-button class="m-1" variant="secondary" @click="cancel()">Cancel</b-button>
+              <b-button class="m-1" variant="primary" @click="ok()">OK</b-button>
+            </div>
+          </div>
+        </template>
       </b-modal>
     </main>
   </div>
@@ -205,6 +225,7 @@ const defaultData = {
     id: null,
     name: null,
     playlist: [],
+    selected: [],
   },
   append: {
     tracks: [],
@@ -720,6 +741,7 @@ export default {
       var $this = this
       var album = this.getAlbum()
       var trackId = album.playlist[this.playIndex].id
+      var exists = false
 
       album.name = this.edit.name
       album.playlist.splice(0)
@@ -728,11 +750,26 @@ export default {
         
         if (track.id === trackId) {
           $this.playIndex = index
+
+          exists = true
         }
       })
+      if (exists === false) {
+        this.updateVideo(0, false)
+      }
       this.$nextTick(() => { this.$bvModal.hide('album-modify') })
 
       syncToIndexedDB(this.playlists)
+    },
+    removeTrack () {
+      var $this = this
+      this.edit.selected.forEach(function(trackId) {
+        let index = $this.edit.playlist.findIndex(function(track) {
+          return track.id === trackId
+        })
+        $this.edit.playlist.splice(index, 1)
+      })
+      this.edit.selected.splice(0)
     },
   },
 }
@@ -858,16 +895,12 @@ main {
   color: rgb(52, 58, 64) !important;
 }
 
-.toast-container {
-  min-width: 500px;
+.modal-modify-footer {
+  display: flex;
+  flex: 1;
 }
 
-.toast {
-  background-color: rgba(255, 255, 255, 0.9);
-  width: 100%;
-}
-
-.toast-body {
-  color: black;
+.modal-modify-footer > div:first-child {
+  flex: 1;
 }
 </style>
