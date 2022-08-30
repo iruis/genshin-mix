@@ -89,7 +89,7 @@
           <hr>
           <p class="text-center">변경내용</p>
           <p>
-            <strong>2022-08-29</strong><br>초기 샘플리스트 오타수정<br>다이얼로그 사이즈 계산문제 수정<br>
+            <strong>2022-08-29</strong><br>초기 샘플 리스트 오타수정<br>다이얼로그 사이즈 계산문제 수정<br>
             <strong>2022-08-31</strong><br>사용자 앨범의 곡 삭제기능 구현<br>
           </p>
         </div>
