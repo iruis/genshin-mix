@@ -88,11 +88,10 @@
           </p>
           <hr>
           <p class="text-center">변경내용</p>
-          <p>
-            <strong>2022-08-29</strong><br>초기 샘플 리스트 오타수정<br>다이얼로그 사이즈 계산문제 수정<br>
-            <strong>2022-08-31</strong><br>사용자 앨범의 곡 삭제기능 구현<br>
-            <strong>2023-01-18</strong><br>유성의 궤적, 지혜와 지식의 숲, 빛나는 뭇별3 추가<br>
-          </p>
+          <div v-for="change in changes" :key="change.id">
+            <strong>{{ change.date }}</strong><br>
+            <span>{{ change.content }}</span>
+          </div>
         </div>
       </b-modal>
 
@@ -192,6 +191,7 @@
 import YoutubePlayer from 'youtube-player'
 import draggable from 'vuedraggable'
 import albums from './albums.js'
+import changes from './changes.js'
 
 const PlayerState = {
   UNSTARTED: -1,
@@ -213,6 +213,7 @@ const samplePlaylist = { id: 'c1', name: '샘플 리스트', playlist: [
 
 const defaultData = {
   albums: albums,
+  changes: changes,
   playlists: [],
   selected: [],
   importData: {
